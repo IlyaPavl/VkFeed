@@ -14,7 +14,7 @@ class FeedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .cyan
+        view.backgroundColor = .systemBrown
         fetcher.getFeed { feedResponse in
             guard let feedResponse = feedResponse else {return}
             feedResponse.items.map { feedItem in

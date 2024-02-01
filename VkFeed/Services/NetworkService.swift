@@ -24,6 +24,7 @@ final class NetworkService: Networking {
         var allParameters = parameters
         allParameters["access_token"] = token
         allParameters["v"] = API.version
+        
         if let url = self.url(from: path, parameters: allParameters) {
             print("URL: \(url)")
             let request = URLRequest(url: url)
@@ -32,8 +33,7 @@ final class NetworkService: Networking {
         }
     }
 
-    private func createDataTask(from request: URLRequest,
-                                completion: @escaping (Data?, Error?) -> Void) -> URLSessionDataTask {
+    private func createDataTask(from request: URLRequest, completion: @escaping (Data?, Error?) -> Void) -> URLSessionDataTask {
         URLSession.shared.dataTask(with: request) { (data, _, error) in
             DispatchQueue.main.async {
                 completion(data, error)

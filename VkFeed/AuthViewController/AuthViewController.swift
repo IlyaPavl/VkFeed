@@ -20,8 +20,9 @@ class AuthViewController: UIViewController {
         view.backgroundColor = .lightGray
         setupButton()
     }
-    
-    
+}
+
+extension AuthViewController {
     func setupButton() {
         
         loginButton.backgroundColor = UIColor.systemBlue
@@ -44,19 +45,17 @@ class AuthViewController: UIViewController {
     @objc func authantication() {
         authService.wakeUpSession()
     }
-    
-    
 }
 
-extension UIViewController {
-    
-    class func loadFromStoryboard<T: UIViewController>() -> T {
-        let name = String(describing: T.self)
-        let storyboard = UIStoryboard(name: name, bundle: nil)
-        if let viewController = storyboard.instantiateInitialViewController() as? T {
-            return viewController
-        } else {
-            fatalError("Error: No initial view controller in \(name) storyboard!")
-        }
-    }
-}
+//extension AuthViewController {
+//    
+//    class func loadFromStoryboard<T: UIViewController>() -> T {
+//        let name = String(describing: T.self)
+//        let storyboard = UIStoryboard(name: name, bundle: nil)
+//        if let viewController = storyboard.instantiateInitialViewController() as? T {
+//            return viewController
+//        } else {
+//            fatalError("Error: No initial view controller in \(name) storyboard!")
+//        }
+//    }
+//}
