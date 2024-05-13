@@ -49,6 +49,7 @@ class AuthService: NSObject, VKSdkDelegate, VKSdkUIDelegate {
         }
     }
     
+    //MARK: - VKSdkDelegate methods
     func vkSdkAccessAuthorizationFinished(with result: VKAuthorizationResult!) {
         print(#function)
         if result.token != nil {
@@ -69,5 +70,5 @@ class AuthService: NSObject, VKSdkDelegate, VKSdkUIDelegate {
     func vkSdkNeedCaptchaEnter(_ captchaError: VKError!) {
         print(#function)
     }
-    
+
 }

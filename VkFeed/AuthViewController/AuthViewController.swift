@@ -14,16 +14,14 @@ class AuthViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         authService = SceneDelegate.shared().authService
-        
-        view.backgroundColor = .lightGray
-        setupButton()
+        setupAuthVC()
     }
 }
 
 extension AuthViewController {
-    func setupButton() {
+    func setupAuthVC() {
+        view.backgroundColor = .lightGray
         
         loginButton.backgroundColor = UIColor.systemBlue
         loginButton.setTitle("Авторизация ВКонтакте", for: .normal)
