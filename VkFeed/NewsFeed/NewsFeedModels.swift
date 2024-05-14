@@ -9,23 +9,26 @@
 import UIKit
 
 enum NewsFeed {
-   
-  enum Model {
-    struct Request {
-      enum RequestType {
-        case some
-      }
+    
+    enum Model {
+        struct Request {
+            enum RequestType {
+                case some
+                case getFeed
+            }
+        }
+        struct Response {
+            enum ResponseType {
+                case some
+                case presentNewsFeed
+            }
+        }
+        struct ViewModel {
+            enum ViewModelData {
+                case some
+                case dispalyNewsFeed
+            }
+        }
     }
-    struct Response {
-      enum ResponseType {
-        case some
-      }
-    }
-    struct ViewModel {
-      enum ViewModelData {
-        case some
-      }
-    }
-  }
-  
+    
 }

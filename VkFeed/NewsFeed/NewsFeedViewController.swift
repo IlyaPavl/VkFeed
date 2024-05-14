@@ -37,15 +37,40 @@ class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.dataSource = self
+        tableView.delegate = self
         setup()
         setupNewsFeedVCUI()
         view.backgroundColor = .systemBlue
     }
     
     func displayData(viewModel: NewsFeed.Model.ViewModel.ViewModelData) {
-        
+        switch viewModel {
+        case .some:
+            print("some VC")
+        case .dispalyNewsFeed:
+            print("dispalyNewsFeed VC")
+        }
     }
     
+}
+
+extension NewsFeedViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 5
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: NewsFeedTableViewCell.cellIdentifier, for: indexPath) as! NewsFeedTableViewCell
+        cell.configureCellWith(postText: "Cell \(indexPath.row)")
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("row selected")
+        interactor?.makeRequest(request: .getFeed)
+    }
 }
 
 extension NewsFeedViewController {
