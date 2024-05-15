@@ -16,11 +16,9 @@ class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
     
     var interactor: NewsFeedBusinessLogic?
     var router: (NSObjectProtocol & NewsFeedRoutingLogic)?
-    
     private let tableView = NewsFeedTableView()
     
     // MARK: Setup
-    
     private func setup() {
         let viewController        = self
         let interactor            = NewsFeedInteractor()
@@ -34,7 +32,6 @@ class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
     }
     
     // MARK: View lifecycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self

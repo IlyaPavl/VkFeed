@@ -31,8 +31,6 @@
 		C7F727F92B28CE7A0031E069 /* VKSdkFramework.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C7F727F72B28CE7A0031E069 /* VKSdkFramework.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C7F727FC2B28D0DC0031E069 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F727FB2B28D0DC0031E069 /* AuthService.swift */; };
 		C7F727FF2B28D3040031E069 /* AuthViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C7F727FE2B28D3040031E069 /* AuthViewController.storyboard */; };
-		C7F728012B28EBD00031E069 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F728002B28EBD00031E069 /* FeedViewController.swift */; };
-		C7F728042B28EBE90031E069 /* FeedViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C7F728032B28EBE90031E069 /* FeedViewController.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -94,8 +92,6 @@
 		C7F727F72B28CE7A0031E069 /* VKSdkFramework.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = VKSdkFramework.xcframework; path = Carthage/Build/VKSdkFramework.xcframework; sourceTree = "<group>"; };
 		C7F727FB2B28D0DC0031E069 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		C7F727FE2B28D3040031E069 /* AuthViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AuthViewController.storyboard; sourceTree = "<group>"; };
-		C7F728002B28EBD00031E069 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
-		C7F728032B28EBE90031E069 /* FeedViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FeedViewController.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,7 +172,6 @@
 				C7F727FD2B28D0E00031E069 /* Services */,
 				C7F728022B28EBD40031E069 /* AuthViewController */,
 				C73075862B2F5C96009A1039 /* NewsFeed */,
-				C7F728052B28EBEF0031E069 /* FeedViewController */,
 				C7F727CE2B28C81B0031E069 /* Assets.xcassets */,
 				C7F727D02B28C81B0031E069 /* LaunchScreen.storyboard */,
 				C7F727D32B28C81B0031E069 /* Info.plist */,
@@ -228,15 +223,6 @@
 				C7F727FE2B28D3040031E069 /* AuthViewController.storyboard */,
 			);
 			path = AuthViewController;
-			sourceTree = "<group>";
-		};
-		C7F728052B28EBEF0031E069 /* FeedViewController */ = {
-			isa = PBXGroup;
-			children = (
-				C7F728002B28EBD00031E069 /* FeedViewController.swift */,
-				C7F728032B28EBE90031E069 /* FeedViewController.storyboard */,
-			);
-			path = FeedViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -348,7 +334,6 @@
 				C7F727D22B28C81B0031E069 /* LaunchScreen.storyboard in Resources */,
 				C7F727FF2B28D3040031E069 /* AuthViewController.storyboard in Resources */,
 				C7F727CF2B28C81B0031E069 /* Assets.xcassets in Resources */,
-				C7F728042B28EBE90031E069 /* FeedViewController.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,7 +385,6 @@
 				C7F727CA2B28C81A0031E069 /* AuthViewController.swift in Sources */,
 				C7F727C62B28C81A0031E069 /* AppDelegate.swift in Sources */,
 				C73075932B2F5D08009A1039 /* NewsFeedInteractor.swift in Sources */,
-				C7F728012B28EBD00031E069 /* FeedViewController.swift in Sources */,
 				C7F727C82B28C81A0031E069 /* SceneDelegate.swift in Sources */,
 				48833D202BF15E3C00B23B85 /* NewsFeedTableViewCell.swift in Sources */,
 				C7C982E82B2B5FC100701ED9 /* NetworkService.swift in Sources */,
