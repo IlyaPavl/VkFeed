@@ -17,6 +17,7 @@ class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
     var interactor: NewsFeedBusinessLogic?
     var router: (NSObjectProtocol & NewsFeedRoutingLogic)?
     private let tableView = NewsFeedTableView()
+    private var feedViewModel = FeedViewModel.init(cells: [])
     
     // MARK: Setup
     private func setup() {
@@ -38,35 +39,40 @@ class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
         tableView.delegate = self
         setup()
         setupNewsFeedVCUI()
-        view.backgroundColor = .systemBlue
+        
+        interactor?.makeRequest(request: .getNewsFeed)
     }
     
     func displayData(viewModel: NewsFeed.Model.ViewModel.ViewModelData) {
         switch viewModel {
-        case .some:
-            print("some VC")
-        case .dispalyNewsFeed:
-            print("dispalyNewsFeed VC")
+            
+        case .dispalyNewsFeed(feedViewModel: let feedViewModel):
+            self.feedViewModel = feedViewModel
+            tableView.reloadData()
         }
     }
-    
 }
 
 extension NewsFeedViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return feedViewModel.cells.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NewsFeedTableViewCell.cellIdentifier, for: indexPath) as! NewsFeedTableViewCell
-        cell.configureCellWith(postText: "Cell \(indexPath.row)")
+        let cellViewModel = feedViewModel.cells[indexPath.row]
+        cell.configureCellWith(viewModel: cellViewModel)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("row selected")
-        interactor?.makeRequest(request: .getFeed)
+        interactor?.makeRequest(request: .getNewsFeed)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        tableView.estimatedRowHeight
     }
 }
 

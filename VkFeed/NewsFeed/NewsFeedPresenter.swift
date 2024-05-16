@@ -17,12 +17,18 @@ class NewsFeedPresenter: NewsFeedPresentationLogic {
     
     func presentData(response: NewsFeed.Model.Response.ResponseType) {
         switch response {
-        case .some:
-            print("some presenter")
-        case .presentNewsFeed:
-            print("presentNewsFeed presenter")
-            viewController?.displayData(viewModel: .dispalyNewsFeed)
+            
+        case .presentNewsFeed(feed: let feed):
+            let cells = feed.items.map { feedItem in
+                cellViewModel(from: feedItem)
+            }
+            let feedViewModel = FeedViewModel.init(cells: cells)
+            viewController?.displayData(viewModel: .dispalyNewsFeed(feedViewModel: feedViewModel))
         }
+        
     }
     
+    private func cellViewModel(from feedItem: FeedItem) -> FeedViewModel.Cell {
+        FeedViewModel.Cell.init(text: feedItem.text)
+    }
 }

@@ -7,8 +7,13 @@
 
 import UIKit
 
+protocol FeedCellViewModel {
+    var text: String? { get }
+}
+
 class NewsFeedTableViewCell: UITableViewCell {
     static let cellIdentifier = "postIdentifier"
+    
     private var postText = UILabel()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -20,8 +25,8 @@ class NewsFeedTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configureCellWith(postText: String) {
-        self.postText.text = postText
+    func configureCellWith(viewModel: FeedCellViewModel) {
+        self.postText.text = viewModel.text
     }
 }
 
