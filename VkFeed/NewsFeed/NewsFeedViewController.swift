@@ -61,8 +61,9 @@ extension NewsFeedViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NewsFeedTableViewCell.cellIdentifier, for: indexPath) as! NewsFeedTableViewCell
-        let cellViewModel = feedViewModel.cells[indexPath.row]
-        cell.configureCellWith(viewModel: cellViewModel)
+//        let cellViewModel = feedViewModel.cells[indexPath.row]
+//        cell.configureCellWith(viewModel: cellViewModel)
+        cell.textLabel?.text = "index \(indexPath.row)"
         return cell
     }
     
@@ -72,7 +73,7 @@ extension NewsFeedViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        tableView.estimatedRowHeight
+        300
     }
 }
 
