@@ -2,8 +2,8 @@
 //  NewsFeedRouter.swift
 //  VkFeed
 //
-//  Created by ily.pavlov on 17.12.2023.
-//  Copyright (c) 2023 ___ORGANIZATIONNAME___. All rights reserved.
+//  Created by Илья Павлов on 17.12.2023.
+//  Copyright (c) 2023 . All rights reserved.
 //
 
 import UIKit

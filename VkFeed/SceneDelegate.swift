@@ -2,7 +2,7 @@
 //  SceneDelegate.swift
 //  VkFeed
 //
-//  Created by ily.pavlov on 12.12.2023.
+//  Created by Илья Павлов on 12.12.2023.
 //
 
 import UIKit
@@ -32,7 +32,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, AuthServiceDelegate {
         authService = AuthService()
         authService?.delegate = self
         
-        let authVC = UIStoryboard(name: "AuthViewController", bundle: nil).instantiateInitialViewController() as? AuthViewController
+        let authVC = AuthViewController()
         window?.rootViewController = authVC
         window?.makeKeyAndVisible()
     }

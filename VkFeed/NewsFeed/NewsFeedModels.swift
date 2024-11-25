@@ -2,15 +2,15 @@
 //  NewsFeedModels.swift
 //  VkFeed
 //
-//  Created by ily.pavlov on 17.12.2023.
-//  Copyright (c) 2023 ___ORGANIZATIONNAME___. All rights reserved.
+//  Created by Илья Павлов on 17.12.2023.
+//  Copyright (c) 2023 . All rights reserved.
 //
 
 import UIKit
 
-enum NewsFeed {
+public enum NewsFeed {
     
-    enum Model {
+    public enum Model {
         struct Request {
             enum RequestType {
                 case getNewsFeed
@@ -32,8 +32,22 @@ enum NewsFeed {
 
 struct FeedViewModel {
     struct Cell: FeedCellViewModel {
+        var iconUrlString: String
+        var name: String
+        var date: String
         var text: String?
-        
+        var likes: String?
+        var comments: String?
+        var shares: String?
+        var views: String?
+        var photoAttachment: FeedCellPhotoAttachmentViewModel?
+
+    }
+    
+    struct FeedCellPhotoAttachment: FeedCellPhotoAttachmentViewModel {
+        var photoUrlString: String?
+        var width: Int
+        var height: Int
     }
     let cells: [Cell]
 }

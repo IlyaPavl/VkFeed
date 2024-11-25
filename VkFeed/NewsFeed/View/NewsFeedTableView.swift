@@ -22,6 +22,6 @@ class NewsFeedTableView: UITableView {
         self.register(NewsFeedTableViewCell.self, forCellReuseIdentifier: NewsFeedTableViewCell.cellIdentifier)
         self.separatorStyle = .singleLine
         self.separatorColor = .systemGray5
-        self.estimatedRowHeight = 100
+        
     }
 }

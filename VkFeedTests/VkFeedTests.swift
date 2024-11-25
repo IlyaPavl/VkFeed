@@ -2,7 +2,7 @@
 //  VkFeedTests.swift
 //  VkFeedTests
 //
-//  Created by ily.pavlov on 12.12.2023.
+//  Created by Илья Павлов on 12.12.2023.
 //
 
 import XCTest

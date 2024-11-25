@@ -2,8 +2,8 @@
 //  NewsFeedViewController.swift
 //  VkFeed
 //
-//  Created by ily.pavlov on 17.12.2023.
-//  Copyright (c) 2023 ___ORGANIZATIONNAME___. All rights reserved.
+//  Created by Илья Павлов on 17.12.2023.
+//  Copyright (c) 2023 . All rights reserved.
 //
 
 import UIKit
@@ -18,8 +18,9 @@ class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
     var router: (NSObjectProtocol & NewsFeedRoutingLogic)?
     private let tableView = NewsFeedTableView()
     private var feedViewModel = FeedViewModel.init(cells: [])
+    private let refreshControl = UIRefreshControl()
     
-    // MARK: Setup
+    // MARK: - Setup
     private func setup() {
         let viewController        = self
         let interactor            = NewsFeedInteractor()
@@ -32,27 +33,29 @@ class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
         router.viewController     = viewController
     }
     
-    // MARK: View lifecycle
+    // MARK: - View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
         setup()
         setupNewsFeedVCUI()
-        
-        interactor?.makeRequest(request: .getNewsFeed)
+        setupRefreshControl()
+        getNewsFeedData()
     }
     
+    // MARK: - NewsFeedDisplayLogic
     func displayData(viewModel: NewsFeed.Model.ViewModel.ViewModelData) {
         switch viewModel {
-            
         case .dispalyNewsFeed(feedViewModel: let feedViewModel):
             self.feedViewModel = feedViewModel
+            refreshControl.endRefreshing()
             tableView.reloadData()
         }
     }
 }
 
+// MARK: - UITableViewDelegate, UITableViewDataSource
 extension NewsFeedViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -61,22 +64,22 @@ extension NewsFeedViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NewsFeedTableViewCell.cellIdentifier, for: indexPath) as! NewsFeedTableViewCell
-//        let cellViewModel = feedViewModel.cells[indexPath.row]
-//        cell.configureCellWith(viewModel: cellViewModel)
-        cell.textLabel?.text = "index \(indexPath.row)"
+        let cellViewModel = feedViewModel.cells[indexPath.row]
+        cell.configureCellWith(viewModel: cellViewModel)
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("row selected")
-        interactor?.makeRequest(request: .getNewsFeed)
-    }
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        print("row selected")
+//        getNewsFeedData()
+//    }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         300
     }
 }
 
+// MARK: - Setup UI
 extension NewsFeedViewController {
     private func setupNewsFeedVCUI() {
         view.addSubview(tableView)
@@ -88,5 +91,17 @@ extension NewsFeedViewController {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+    
+    private func setupRefreshControl() {
+        tableView.refreshControl = refreshControl
+        refreshControl.addTarget(self, action: #selector(getNewsFeedData), for: .valueChanged)
+    }
+    
+    @objc private func getNewsFeedData() {
+        interactor?.makeRequest(request: .getNewsFeed)
+        if refreshControl.isRefreshing {
+            refreshControl.beginRefreshing()
+        }
     }
 }
