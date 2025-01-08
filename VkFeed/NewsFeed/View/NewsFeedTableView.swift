@@ -20,7 +20,7 @@ class NewsFeedTableView: UITableView {
     
     private func setupTableUI() {
         self.register(NewsFeedTableViewCell.self, forCellReuseIdentifier: NewsFeedTableViewCell.cellIdentifier)
-        self.separatorStyle = .singleLine
+        self.separatorStyle = .none
         self.separatorColor = .systemGray5
         
     }

@@ -22,6 +22,7 @@ public enum APIError: Error {
     case decodingError
     case serverError
     case invalidData
+    case invalidToken
 }
 
 public enum HTTPMethodType: String {

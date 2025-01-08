@@ -75,7 +75,8 @@ extension NewsFeedViewController: UITableViewDelegate, UITableViewDataSource {
 //    }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        300
+        let cellViewModel = feedViewModel.cells[indexPath.row]
+        return cellViewModel.sizes.totalHeight
     }
 }
 
@@ -91,6 +92,9 @@ extension NewsFeedViewController {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+        
+        navigationItem.title = "Главная"
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     private func setupRefreshControl() {

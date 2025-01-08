@@ -9,11 +9,14 @@
 import UIKit
 
 protocol NewsFeedPresentationLogic {
-    func presentData(response: NewsFeed.Model.Response.ResponseType)
+    func presentData(response: NewsFeed.Model.Response.ResponseType) async
 }
 
+@MainActor
 class NewsFeedPresenter: NewsFeedPresentationLogic {
     weak var viewController: NewsFeedDisplayLogic?
+    var cellLayoutCalulator: FeedCellLayoutCalculator = FeedCellLayoutCalculator()
+    
     let dtFormatter: DateFormatter = {
         let df = DateFormatter()
         df.locale = Locale(identifier: "ru_RU")
@@ -23,15 +26,15 @@ class NewsFeedPresenter: NewsFeedPresentationLogic {
     
     func presentData(response: NewsFeed.Model.Response.ResponseType) {
         switch response {
-            
-        case .presentNewsFeed(feed: let feed):
-            let cells = feed.items.map { feedItem in
-                cellViewModel(from: feedItem, profiles: feed.profiles, groups: feed.groups)
-            }
-            let feedViewModel = FeedViewModel.init(cells: cells)
-            viewController?.displayData(viewModel: .dispalyNewsFeed(feedViewModel: feedViewModel))
+                
+            case .presentNewsFeed(feed: let feed):
+                let cells = feed.items.map { feedItem in
+                    cellViewModel(from: feedItem, profiles: feed.profiles, groups: feed.groups)
+                }
+                let feedViewModel = FeedViewModel(cells: cells)
+                
+                self.viewController?.displayData(viewModel: .dispalyNewsFeed(feedViewModel: feedViewModel))
         }
-        
     }
     
     private func cellViewModel(from feedItem: FeedItem, profiles: [Profile], groups: [Group]) -> FeedViewModel.Cell {
@@ -40,6 +43,7 @@ class NewsFeedPresenter: NewsFeedPresentationLogic {
         let date = Date(timeIntervalSince1970: feedItem.date)
         let dateTitle = dtFormatter.string(from: date)
         let photoAttachment = photoAttacchment(feedItem: feedItem)
+        let sizes = cellLayoutCalulator.sizes(postText: feedItem.text, attachment: photoAttachment)
         
         return FeedViewModel.Cell.init(iconUrlString: profile.photo,
                                        name: profile.name,
@@ -49,7 +53,8 @@ class NewsFeedPresenter: NewsFeedPresentationLogic {
                                        comments: String(feedItem.comments?.count ?? 0),
                                        shares: String(feedItem.reposts?.count ?? 0),
                                        views: String(feedItem.views?.count ?? 0),
-                                       photoAttachment: photoAttachment)
+                                       photoAttachment: photoAttachment,
+                                       sizes: sizes)
     }
     
     private func profile(for sourceID: Int, profiles: [Profile], groups: [Group]) -> ProfileRepresenatable {

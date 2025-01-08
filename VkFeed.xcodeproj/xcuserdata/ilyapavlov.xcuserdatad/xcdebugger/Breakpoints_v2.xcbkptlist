@@ -7,32 +7,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "9DC1912D-61F2-483D-A089-8F2776467EED"
+            uuid = "1CF71C6E-5E63-4D63-A2DC-A891365CE675"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "VkFeed/SceneDelegate.swift"
+            filePath = "VkFeed/NewsFeed/View/NewsFeedViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "80"
-            endingLineNumber = "80"
-            landmarkName = "authServiceSignIn()"
+            startingLineNumber = "79"
+            endingLineNumber = "79"
+            landmarkName = "tableView(_:heightForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "3CA92095-883C-49DD-B426-5EBF966FE089"
+            uuid = "85B04CC7-00F7-4728-B65C-341A3E48E7F3"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "VkFeed/NewsFeed/NewsFeedInteractor.swift"
+            filePath = "VkFeed/NewsFeed/View/NewsFeedViewHelpers/FeedCellLayoutCalculator.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "30"
-            endingLineNumber = "30"
-            landmarkName = "makeRequest(request:)"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
+            landmarkName = "sizes(postText:attachment:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

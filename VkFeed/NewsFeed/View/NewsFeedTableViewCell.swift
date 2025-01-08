@@ -17,6 +17,7 @@ protocol FeedCellViewModel {
     var shares: String? { get }
     var views: String? { get }
     var photoAttachment: FeedCellPhotoAttachmentViewModel? { get }
+    var sizes: FeedCellSizes { get }
 }
 
 protocol FeedCellPhotoAttachmentViewModel {
@@ -25,13 +26,21 @@ protocol FeedCellPhotoAttachmentViewModel {
     var height: Int { get }
 }
 
+protocol FeedCellSizes {
+    var postLabelFrame: CGRect { get }
+    var attachmentFrame: CGRect { get }
+    var bottomView: CGRect { get }
+    var totalHeight: CGFloat { get }
+}
+
 class NewsFeedTableViewCell: UITableViewCell {
     static let cellIdentifier = "postIdentifier"
     
     // Первый слой
     private let cardView = {
         let view = UIView()
-        view.backgroundColor = .systemGray6
+        view.layer.cornerRadius = 10
+        view.clipsToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -40,30 +49,25 @@ class NewsFeedTableViewCell: UITableViewCell {
     private let topView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-//        view.backgroundColor = .systemBrown
         return view
     }()
     
     private let postLabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         label.font = Constants.postLabelFont
         label.textColor = UIColor.darkGray
-//        label.backgroundColor = .systemGreen
         return label
     }()
     
     let postImageView: WebImageView = {
         let imageView = WebImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.backgroundColor = .systemGray5
+        imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
     let bottomView: UIView = {
         let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -83,7 +87,6 @@ class NewsFeedTableViewCell: UITableViewCell {
         label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         label.numberOfLines = 0
         label.textColor = .black
-//        label.backgroundColor = .white
         return label
     }()
     
@@ -92,7 +95,6 @@ class NewsFeedTableViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .systemGray3
         label.font = UIFont.systemFont(ofSize: 12)
-//        label.backgroundColor = .white
         return label
     }()
     
@@ -100,7 +102,7 @@ class NewsFeedTableViewCell: UITableViewCell {
     let likesContainer: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .systemGray5
+//        view.backgroundColor = .systemGray5
         view.layer.cornerRadius = Constants.bottomViewHeight / 2
         view.clipsToBounds = true
         return view
@@ -109,7 +111,7 @@ class NewsFeedTableViewCell: UITableViewCell {
     let commentsContainer: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .systemGray5
+//        view.backgroundColor = .systemGray5
         view.layer.cornerRadius = Constants.bottomViewHeight / 2
         view.clipsToBounds = true
         return view
@@ -118,7 +120,7 @@ class NewsFeedTableViewCell: UITableViewCell {
     let sharesContainer: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .systemGray5
+//        view.backgroundColor = .systemGray5
         view.layer.cornerRadius = Constants.bottomViewHeight / 2
         view.clipsToBounds = true
         return view
@@ -200,7 +202,6 @@ class NewsFeedTableViewCell: UITableViewCell {
         label.textColor = .systemGray3
         label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         label.lineBreakMode = .byClipping
-//        label.textAlignment = .right
         return label
     }()
     
@@ -209,8 +210,6 @@ class NewsFeedTableViewCell: UITableViewCell {
         setupConstraints()
         backgroundColor = .clear
         selectionStyle = .none
-        cardView.layer.cornerRadius = 10
-        cardView.clipsToBounds = true
     }
     
     required init?(coder: NSCoder) {
@@ -221,18 +220,25 @@ class NewsFeedTableViewCell: UITableViewCell {
         iconImageView.set(imageURL: viewModel.iconUrlString)
         nameLabel.text = viewModel.name
         dateLabel.text = viewModel.date
+        postLabel.text = viewModel.text
         
-        likesLabel.text = viewModel.likes
-        commentsLabel.text = viewModel.comments
-        sharesLabel.text = viewModel.shares
+        if viewModel.likes != "0" {
+            likesLabel.text = viewModel.likes
+        }
+        
+        if viewModel.comments != "0" {
+            commentsLabel.text = viewModel.comments
+        }
+        
+        if viewModel.shares != "0" {
+            sharesLabel.text = viewModel.shares
+        }
+        
         viewsLabel.text = viewModel.views
         
-        if viewModel.text != nil {
-            postLabel.text = viewModel.text
-            postLabel.isHidden = false
-        } else {
-            postLabel.isHidden = true
-        }
+        postLabel.frame = viewModel.sizes.postLabelFrame
+        postImageView.frame = viewModel.sizes.attachmentFrame
+        bottomView.frame = viewModel.sizes.bottomView
         
         if let photoAttachment = viewModel.photoAttachment {
             postImageView.set(imageURL: photoAttachment.photoUrlString)
@@ -270,21 +276,6 @@ extension NewsFeedTableViewCell {
         topView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -Constants.commonPadding).isActive = true
         topView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: Constants.commonPadding).isActive = true
         topView.heightAnchor.constraint(equalToConstant: Constants.topViewHeight).isActive = true
-        
-        postLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: Constants.commonPadding).isActive = true
-        postLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -Constants.commonPadding).isActive = true
-        postLabel.topAnchor.constraint(equalTo: topView.bottomAnchor).isActive = true
-        postLabel.heightAnchor.constraint(equalToConstant: Constants.postLabelViewHeight).isActive = true
-        
-        postImageView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor).isActive = true
-        postImageView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor).isActive = true
-        postImageView.topAnchor.constraint(equalTo: postLabel.bottomAnchor, constant: Constants.commonPadding).isActive = true
-        postImageView.heightAnchor.constraint(equalToConstant: Constants.postImageViewHeight).isActive = true
-        
-        bottomView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor).isActive = true
-        bottomView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor).isActive = true
-        bottomView.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -Constants.commonPadding).isActive = true
-        bottomView.heightAnchor.constraint(equalToConstant: Constants.bottomViewItemHeight).isActive = true
     }
     
     private func setupThirdLayerTopConstraints() {
@@ -306,6 +297,7 @@ extension NewsFeedTableViewCell {
         
         // dateLabel Constraints
         dateLabel.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: Constants.commonPadding).isActive = true
+        dateLabel.trailingAnchor.constraint(equalTo: topView.trailingAnchor, constant: -Constants.commonPadding).isActive = true
         dateLabel.bottomAnchor.constraint(equalTo: iconImageView.bottomAnchor).isActive = true
         dateLabel.heightAnchor.constraint(equalToConstant: 14).isActive = true
         
@@ -370,13 +362,13 @@ extension NewsFeedTableViewCell {
     private func fourthLayerBuilder(view: UIView, imageView: UIImageView, label: UILabel) {
         // imageView constraints
         imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 6).isActive = true
+        imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: Constants.bottomViewItemIconSize).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: Constants.bottomViewItemIconSize).isActive = true
         
         // label constraints
         label.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         label.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 4).isActive = true
-        label.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -8).isActive = true
+        label.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -4).isActive = true
     }
 }
