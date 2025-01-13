@@ -12,7 +12,7 @@ protocol NewsFeedDisplayLogic: AnyObject {
     func displayData(viewModel: NewsFeed.Model.ViewModel.ViewModelData)
 }
 
-class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
+class NewsFeedViewController: UIViewController {
     
     var interactor: NewsFeedBusinessLogic?
     var router: (NSObjectProtocol & NewsFeedRoutingLogic)?
@@ -43,14 +43,27 @@ class NewsFeedViewController: UIViewController, NewsFeedDisplayLogic {
         setupRefreshControl()
         getNewsFeedData()
     }
-    
-    // MARK: - NewsFeedDisplayLogic
+}
+
+// MARK: - NewsFeedDisplayLogic
+extension NewsFeedViewController: NewsFeedDisplayLogic {
     func displayData(viewModel: NewsFeed.Model.ViewModel.ViewModelData) {
         switch viewModel {
         case .dispalyNewsFeed(feedViewModel: let feedViewModel):
             self.feedViewModel = feedViewModel
             refreshControl.endRefreshing()
             tableView.reloadData()
+        }
+    }
+}
+
+// MARK: - NewsFeedTableViewCellDelegate
+extension NewsFeedViewController: NewsFeedTableViewCellDelegate {
+    func didTapMoreTextButton(cell: NewsFeedTableViewCell)  {
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
+        let cellViewModel = feedViewModel.cells[indexPath.row]
+        Task {
+            await interactor?.makeRequest(request: .revealPostId(postId: cellViewModel.postId))
         }
     }
 }
@@ -63,8 +76,10 @@ extension NewsFeedViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: NewsFeedTableViewCell.cellIdentifier, for: indexPath) as! NewsFeedTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: NewsFeedTableViewCell.cellIdentifier,
+                                                 for: indexPath) as! NewsFeedTableViewCell
         let cellViewModel = feedViewModel.cells[indexPath.row]
+        cell.delegate = self
         cell.configureCellWith(viewModel: cellViewModel)
         return cell
     }
@@ -92,9 +107,8 @@ extension NewsFeedViewController {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-        
-        navigationItem.title = "Главная"
-        navigationController?.navigationBar.prefersLargeTitles = true
+//        navigationItem.title = "Главная"
+//        navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     private func setupRefreshControl() {
@@ -103,9 +117,13 @@ extension NewsFeedViewController {
     }
     
     @objc private func getNewsFeedData() {
-        interactor?.makeRequest(request: .getNewsFeed)
-        if refreshControl.isRefreshing {
-            refreshControl.beginRefreshing()
+        Task {
+            await interactor?.makeRequest(request: .getNewsFeed)
+            DispatchQueue.main.async {
+                if self.refreshControl.isRefreshing {
+                    self.refreshControl.beginRefreshing()
+                }
+            }
         }
     }
 }

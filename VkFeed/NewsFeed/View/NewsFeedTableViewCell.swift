@@ -16,7 +16,7 @@ protocol FeedCellViewModel {
     var comments: String? { get }
     var shares: String? { get }
     var views: String? { get }
-    var photoAttachment: FeedCellPhotoAttachmentViewModel? { get }
+    var photoAttachments: [FeedCellPhotoAttachmentViewModel] { get }
     var sizes: FeedCellSizes { get }
 }
 
@@ -31,10 +31,17 @@ protocol FeedCellSizes {
     var attachmentFrame: CGRect { get }
     var bottomView: CGRect { get }
     var totalHeight: CGFloat { get }
+    var moreTextButtonFrame: CGRect { get }
+}
+
+protocol NewsFeedTableViewCellDelegate: AnyObject {
+    func didTapMoreTextButton(cell: NewsFeedTableViewCell)
 }
 
 class NewsFeedTableViewCell: UITableViewCell {
     static let cellIdentifier = "postIdentifier"
+    
+    weak var delegate: NewsFeedTableViewCellDelegate?
     
     // Первый слой
     private let cardView = {
@@ -57,22 +64,37 @@ class NewsFeedTableViewCell: UITableViewCell {
         label.numberOfLines = 0
         label.font = Constants.postLabelFont
         label.textColor = UIColor.darkGray
+//        label.backgroundColor = .blue
         return label
     }()
     
-    let postImageView: WebImageView = {
+    private let moreTextButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Показать еще...", for: .normal)
+        button.titleLabel?.font = Constants.postLabelFont
+        button.setTitleColor(.systemBlue, for: .normal)
+        button.contentHorizontalAlignment = .left
+        button.contentVerticalAlignment = .center
+        return button
+    }()
+    
+    private let postImageView: WebImageView = {
         let imageView = WebImageView()
         imageView.contentMode = .scaleAspectFit
+        imageView.layer.cornerRadius = Constants.imageViewCornerRadius
+        imageView.clipsToBounds = true
         return imageView
     }()
     
-    let bottomView: UIView = {
+    private let attachmentCollectionView = AttachmentCollectionView()
+    
+    private let bottomView: UIView = {
         let view = UIView()
         return view
     }()
     
     // Третий слой на topView
-    let iconImageView: WebImageView = {
+    private let iconImageView: WebImageView = {
         let imageView = WebImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.backgroundColor = .systemBlue
@@ -81,7 +103,7 @@ class NewsFeedTableViewCell: UITableViewCell {
         return imageView
     }()
     
-    let nameLabel: UILabel = {
+    private let nameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
@@ -90,7 +112,7 @@ class NewsFeedTableViewCell: UITableViewCell {
         return label
     }()
     
-    let dateLabel: UILabel = {
+    private let dateLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .systemGray3
@@ -99,7 +121,7 @@ class NewsFeedTableViewCell: UITableViewCell {
     }()
     
     // Третий слой на bottomView
-    let likesContainer: UIView = {
+    private let likesContainer: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
 //        view.backgroundColor = .systemGray5
@@ -108,7 +130,7 @@ class NewsFeedTableViewCell: UITableViewCell {
         return view
     }()
     
-    let commentsContainer: UIView = {
+    private let commentsContainer: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
 //        view.backgroundColor = .systemGray5
@@ -117,7 +139,7 @@ class NewsFeedTableViewCell: UITableViewCell {
         return view
     }()
     
-    let sharesContainer: UIView = {
+    private let sharesContainer: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
 //        view.backgroundColor = .systemGray5
@@ -126,14 +148,14 @@ class NewsFeedTableViewCell: UITableViewCell {
         return view
     }()
     
-    let viewContainer: UIView = {
+    private let viewContainer: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
     // Четвертый слой на bottomView
-    let likesImage: UIImageView = {
+    private let likesImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(systemName: "heart")
@@ -142,7 +164,7 @@ class NewsFeedTableViewCell: UITableViewCell {
         return imageView
     }()
     
-    let commentsImage: UIImageView = {
+    private let commentsImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(systemName: "message")
@@ -151,7 +173,7 @@ class NewsFeedTableViewCell: UITableViewCell {
         return imageView
     }()
     
-    let sharesImage: UIImageView = {
+    private let sharesImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(systemName: "arrowshape.turn.up.right")
@@ -160,7 +182,7 @@ class NewsFeedTableViewCell: UITableViewCell {
         return imageView
     }()
     
-    let viewsImage: UIImageView = {
+    private let viewsImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(systemName: "eye")
@@ -169,7 +191,7 @@ class NewsFeedTableViewCell: UITableViewCell {
         return imageView
     }()
     
-    let likesLabel: UILabel = {
+    private let likesLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .systemGray3
@@ -178,7 +200,7 @@ class NewsFeedTableViewCell: UITableViewCell {
         return label
     }()
     
-    let commentsLabel: UILabel = {
+    private let commentsLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .systemGray3
@@ -187,7 +209,7 @@ class NewsFeedTableViewCell: UITableViewCell {
         return label
     }()
     
-    let sharesLabel: UILabel = {
+    private let sharesLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .systemGray3
@@ -196,7 +218,7 @@ class NewsFeedTableViewCell: UITableViewCell {
         return label
     }()
     
-    let viewsLabel: UILabel = {
+    private let viewsLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .systemGray3
@@ -204,18 +226,29 @@ class NewsFeedTableViewCell: UITableViewCell {
         label.lineBreakMode = .byClipping
         return label
     }()
+    
+    override func prepareForReuse() {
+        iconImageView.image = nil
+        postImageView.image = nil
+    }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupConstraints()
         backgroundColor = .clear
         selectionStyle = .none
+        moreTextButton.addTarget(self, action: #selector(didTapMoreTextButton), for: .touchUpInside)
+    }
+    
+    @objc func didTapMoreTextButton() {
+        delegate?.didTapMoreTextButton(cell: self)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Public Methods
     func configureCellWith(viewModel: FeedCellViewModel) {
         iconImageView.set(imageURL: viewModel.iconUrlString)
         nameLabel.text = viewModel.name
@@ -237,14 +270,22 @@ class NewsFeedTableViewCell: UITableViewCell {
         viewsLabel.text = viewModel.views
         
         postLabel.frame = viewModel.sizes.postLabelFrame
-        postImageView.frame = viewModel.sizes.attachmentFrame
+        moreTextButton.frame = viewModel.sizes.moreTextButtonFrame
         bottomView.frame = viewModel.sizes.bottomView
         
-        if let photoAttachment = viewModel.photoAttachment {
+        if let photoAttachment = viewModel.photoAttachments.first, viewModel.photoAttachments.count == 1 {
             postImageView.set(imageURL: photoAttachment.photoUrlString)
             postImageView.isHidden = false
+            attachmentCollectionView.isHidden = true
+            postImageView.frame = viewModel.sizes.attachmentFrame
+        } else if viewModel.photoAttachments.count > 1 {
+            attachmentCollectionView.frame = viewModel.sizes.attachmentFrame
+            attachmentCollectionView.isHidden = false
+            attachmentCollectionView.set(photos: viewModel.photoAttachments)
+            postImageView.isHidden = true
         } else {
             postImageView.isHidden = true
+            attachmentCollectionView.isHidden = true
         }
     }
 }
@@ -261,14 +302,16 @@ extension NewsFeedTableViewCell {
     }
     
     private func setupFirstLayerConstraints() {
-        addSubview(cardView)
+        contentView.addSubview(cardView)
         cardView.fillSuperview(padding: Constants.cardInsets)
     }
     
     private func setupSecondLayerConstraints() {
         cardView.addSubview(topView)
         cardView.addSubview(postLabel)
+        cardView.addSubview(moreTextButton)
         cardView.addSubview(postImageView)
+        cardView.addSubview(attachmentCollectionView)
         cardView.addSubview(bottomView)
         
         // topView Constraints

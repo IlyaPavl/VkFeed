@@ -28,4 +28,11 @@ struct Constants {
     static let bottomViewItemInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
     static let bottomViewItemIconSize: CGFloat = 23
     
+    static let minifiedPostLimitLines: CGFloat = 8
+    static let minifiedPostLines: CGFloat = 6
+    
+    static let moreTextButtonInsets: UIEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 0)
+    static let moreTextButtonSize: CGSize = CGSize(width: 170, height: postLabelFont.lineHeight)
+    
+    static let imageViewCornerRadius: CGFloat = 10
 }
