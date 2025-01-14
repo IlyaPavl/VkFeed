@@ -9,7 +9,10 @@ import UIKit
 
 class WebImageView: UIImageView {
     
+    private var currentURLString: String?
+    
     func set(imageURL: String?) {
+        currentURLString = imageURL
         guard let imageURL, let url = URL(string: imageURL) else { return }
         
         if let cachedResponse = URLCache.shared.cachedResponse(for: URLRequest(url: url)) {
@@ -32,5 +35,8 @@ class WebImageView: UIImageView {
            guard let responseURL = response.url else { return }
            let cachedResponse = CachedURLResponse(response: response, data: data)
            URLCache.shared.storeCachedResponse(cachedResponse, for: URLRequest(url: responseURL))
+        if responseURL.absoluteString == currentURLString {
+            self.image = UIImage(data: data)
+        }
        }
 }

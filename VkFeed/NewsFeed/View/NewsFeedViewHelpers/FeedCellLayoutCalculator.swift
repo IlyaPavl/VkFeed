@@ -30,11 +30,11 @@ final class FeedCellLayoutCalculator: FeedCellLayoutCalculatorProtocol {
         let cardViewWidth: CGFloat = screenWidth - Constants.cardInsets.left - Constants.cardInsets.right
         var showMoreTextButton = false
         // MARK: Работа с postLabelFrame
-        var postLabelFrame = CGRect(origin: CGPoint(x: Constants.postLabelInsets.left, y: Constants.postLabelInsets.top),
+        var postLabelFrame = CGRect(origin: CGPoint(x: 0, y: Constants.postLabelInsets.top),
                                     size: CGSize.zero)
         
         if let text = postText, !text.isEmpty {
-            let width = cardViewWidth - Constants.postLabelInsets.left - Constants.postLabelInsets.right
+            let width = cardViewWidth
             var height = text.height(width: width, font: Constants.postLabelFont)
             
             let limitHeight = Constants.postLabelFont.lineHeight * Constants.minifiedPostLimitLines

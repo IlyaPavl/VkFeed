@@ -17,7 +17,7 @@ struct Constants {
     static let groupNameLabelHeight: CGFloat = 15
 
     static let postLabelInsets = UIEdgeInsets(top: 8 + Constants.topViewHeight + 8, left: 8, bottom: 8, right: 8)
-    static let postLabelFont = UIFont.systemFont(ofSize: 15)
+    static let postLabelFont = UIFont.systemFont(ofSize: 16)
     static let postLabelViewHeight: CGFloat = 44
     
     static let postImageViewHeight: CGFloat = 100
@@ -31,8 +31,11 @@ struct Constants {
     static let minifiedPostLimitLines: CGFloat = 8
     static let minifiedPostLines: CGFloat = 6
     
-    static let moreTextButtonInsets: UIEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 0)
+    static let moreTextButtonInsets: UIEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
     static let moreTextButtonSize: CGSize = CGSize(width: 170, height: postLabelFont.lineHeight)
     
     static let imageViewCornerRadius: CGFloat = 10
+    static let searchBarFont = UIFont.systemFont(ofSize: 14)
+    static let profileAvatarInsets: UIEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+
 }

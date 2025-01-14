@@ -14,17 +14,20 @@ public enum NewsFeed {
         struct Request {
             enum RequestType {
                 case getNewsFeed
+                case getUser
                 case revealPostId(postId: Int)
             }
         }
         struct Response {
             enum ResponseType {
                 case presentNewsFeed(feed: FeedResponse, revealedPostIds: [Int])
+                case presentUserInfo(user: UserResponse?)
             }
         }
         struct ViewModel {
             enum ViewModelData {
                 case dispalyNewsFeed(feedViewModel: FeedViewModel)
+                case displayUserInfo(userViewModel: UserViewModel)
             }
         }
     }
@@ -52,4 +55,8 @@ struct FeedViewModel {
         var height: Int
     }
     let cells: [Cell]
+}
+
+struct UserViewModel: TitleViewModel {
+    var profileImageURL: String?
 }

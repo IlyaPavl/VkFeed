@@ -36,6 +36,7 @@ protocol FeedCellSizes {
 
 protocol NewsFeedTableViewCellDelegate: AnyObject {
     func didTapMoreTextButton(cell: NewsFeedTableViewCell)
+    func didTapURL(_ url: URL)
 }
 
 class NewsFeedTableViewCell: UITableViewCell {
@@ -59,20 +60,26 @@ class NewsFeedTableViewCell: UITableViewCell {
         return view
     }()
     
-    private let postLabel = {
-        let label = UILabel()
-        label.numberOfLines = 0
-        label.font = Constants.postLabelFont
-        label.textColor = UIColor.darkGray
-//        label.backgroundColor = .blue
-        return label
+    let postLabel: UITextView = {
+        let textView = UITextView()
+        textView.font = Constants.postLabelFont
+        textView.isScrollEnabled = false
+        textView.isSelectable = true
+        textView.isUserInteractionEnabled = true
+        textView.isEditable = false
+        
+        let padding = textView.textContainer.lineFragmentPadding
+        textView.textContainerInset = .zero
+        
+        textView.dataDetectorTypes = UIDataDetectorTypes.all
+        return textView
     }()
     
     private let moreTextButton: UIButton = {
         let button = UIButton()
         button.setTitle("Показать еще...", for: .normal)
         button.titleLabel?.font = Constants.postLabelFont
-        button.setTitleColor(.systemBlue, for: .normal)
+        button.setTitleColor(.systemGray3, for: .normal)
         button.contentHorizontalAlignment = .left
         button.contentVerticalAlignment = .center
         return button
@@ -238,6 +245,7 @@ class NewsFeedTableViewCell: UITableViewCell {
         backgroundColor = .clear
         selectionStyle = .none
         moreTextButton.addTarget(self, action: #selector(didTapMoreTextButton), for: .touchUpInside)
+        postLabel.delegate = self
     }
     
     @objc func didTapMoreTextButton() {
@@ -413,5 +421,16 @@ extension NewsFeedTableViewCell {
         label.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         label.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 4).isActive = true
         label.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -4).isActive = true
+    }
+}
+
+extension NewsFeedTableViewCell: UITextViewDelegate {
+    func textView(_ textView: UITextView, primaryActionFor textItem: UITextItem, defaultAction: UIAction) -> UIAction? {
+        if case .link(let url) = textItem.content {
+            return UIAction(title: "", image: nil) { [weak self] _ in
+                self?.delegate?.didTapURL(url)
+            }
+        }
+        return nil
     }
 }

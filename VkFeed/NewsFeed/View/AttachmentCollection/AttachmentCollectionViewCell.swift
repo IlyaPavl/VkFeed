@@ -19,7 +19,7 @@ final class AttachmentCollectionViewCell: UICollectionViewCell {
     
     override init (frame: CGRect) {
         super.init(frame: frame)
-        setup()
+        setupAttachmentCell()
     }
 
     required init?(coder: NSCoder) {
@@ -42,7 +42,7 @@ final class AttachmentCollectionViewCell: UICollectionViewCell {
         imageView.set(imageURL: imageURL)
     }
     
-    private func setup() {
+    private func setupAttachmentCell() {
         contentView.addSubview(imageView)
         imageView.fillSuperview()
     }

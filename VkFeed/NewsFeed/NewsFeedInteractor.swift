@@ -16,7 +16,8 @@ class NewsFeedInteractor: NewsFeedBusinessLogic {
     
     var presenter: NewsFeedPresentationLogic?
     var service: NewsFeedService?
-    private var fetcher: SCFeedDataFetcherProtocol = SCFeedDataFetcher(network: SCNetworkService())
+    private var feedFetcher: SCFeedDataFetcherProtocol = SCFeedDataFetcher(network: SCNetworkService())
+    private var userFetcher: SCUsersDataFetcherProtocol = SCUsersDataFetcher(network: SCNetworkService())
     private var revealedPostIds = [Int]()
     private var feedResponse: FeedResponse?
     
@@ -30,7 +31,7 @@ class NewsFeedInteractor: NewsFeedBusinessLogic {
                 Task { [weak self] in
                     guard let self = self else { return }
                     do {
-                        let feedResponse = try await self.fetcher.getFeed()
+                        let feedResponse = try await self.feedFetcher.getFeed()
                         self.feedResponse = feedResponse
                         await self.presentFeed()
                     } catch {
@@ -40,6 +41,17 @@ class NewsFeedInteractor: NewsFeedBusinessLogic {
             case .revealPostId(postId: let postId):
                 revealedPostIds.append(postId)
                 await presentFeed()
+            case .getUser:
+                print("getUser interactor")
+                Task { [weak self] in
+                    guard let self = self else { return }
+                    do {
+                        let userResponse = try await self.userFetcher.getUser()
+                        await presenter?.presentData(response: .presentUserInfo(user: userResponse))
+                    } catch {
+                        print("Failed to fetch user: \(error.localizedDescription)")
+                    }
+                }
         }
     }
     

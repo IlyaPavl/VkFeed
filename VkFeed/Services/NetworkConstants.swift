@@ -13,6 +13,7 @@ public enum API {
     static let version = "5.131"
 
     static let newsFeed = "/method/newsfeed.get"
+    static let usersGet = "/method/users.get"
 }
 
 public enum APIError: Error {

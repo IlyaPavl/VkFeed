@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SafariServices
 
 protocol NewsFeedDisplayLogic: AnyObject {
     func displayData(viewModel: NewsFeed.Model.ViewModel.ViewModelData)
@@ -18,7 +19,13 @@ class NewsFeedViewController: UIViewController {
     var router: (NSObjectProtocol & NewsFeedRoutingLogic)?
     private let tableView = NewsFeedTableView()
     private var feedViewModel = FeedViewModel.init(cells: [])
-    private let refreshControl = UIRefreshControl()
+    private let refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(NewsFeedViewController.self, action: #selector(getNewsFeedData), for: .valueChanged)
+        
+        return refreshControl
+    }()
+    private let titleView = TitleView()
     
     // MARK: - Setup
     private func setup() {
@@ -39,9 +46,10 @@ class NewsFeedViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         setup()
+        setupTopBars()
         setupNewsFeedVCUI()
-        setupRefreshControl()
         getNewsFeedData()
+        getUserData()
     }
 }
 
@@ -53,6 +61,8 @@ extension NewsFeedViewController: NewsFeedDisplayLogic {
             self.feedViewModel = feedViewModel
             refreshControl.endRefreshing()
             tableView.reloadData()
+            case .displayUserInfo(userViewModel: let userViewModel):
+                titleView.set(userViewModel: userViewModel)
         }
     }
 }
@@ -65,6 +75,12 @@ extension NewsFeedViewController: NewsFeedTableViewCellDelegate {
         Task {
             await interactor?.makeRequest(request: .revealPostId(postId: cellViewModel.postId))
         }
+    }
+    
+    func didTapURL(_ url: URL) {
+        // Открываем URL в SFSafariViewController
+        let safariVC = SFSafariViewController(url: url)
+        present(safariVC, animated: true)
     }
 }
 
@@ -84,11 +100,6 @@ extension NewsFeedViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        print("row selected")
-//        getNewsFeedData()
-//    }
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let cellViewModel = feedViewModel.cells[indexPath.row]
         return cellViewModel.sizes.totalHeight
@@ -100,6 +111,9 @@ extension NewsFeedViewController {
     private func setupNewsFeedVCUI() {
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.backgroundColor = .white
+        tableView.keyboardDismissMode = .onDrag
+        tableView.refreshControl = refreshControl
         
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -107,13 +121,6 @@ extension NewsFeedViewController {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-//        navigationItem.title = "Главная"
-//        navigationController?.navigationBar.prefersLargeTitles = true
-    }
-    
-    private func setupRefreshControl() {
-        tableView.refreshControl = refreshControl
-        refreshControl.addTarget(self, action: #selector(getNewsFeedData), for: .valueChanged)
     }
     
     @objc private func getNewsFeedData() {
@@ -125,5 +132,17 @@ extension NewsFeedViewController {
                 }
             }
         }
+    }
+    
+    private func getUserData() {
+        Task {
+            await interactor?.makeRequest(request: .getUser)
+        }
+    }
+    
+    private func setupTopBars() {
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationItem.titleView = titleView
+
     }
 }
