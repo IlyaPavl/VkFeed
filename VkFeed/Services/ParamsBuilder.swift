@@ -8,7 +8,7 @@
 import Foundation
 
 protocol RequestParamsBuilder {
-    func setParameter(key: String, value: String) -> Self
+    func setParameter(key: String, value: String?) -> Self
     func setParameters(parameters: [String: String]) -> Self
     func build() -> [String: String]
 }
@@ -16,7 +16,7 @@ protocol RequestParamsBuilder {
 class URLRequestParamsBuilder: RequestParamsBuilder {
     private var parameters: [String: String] = [:]
     
-    func setParameter(key: String, value: String) -> Self {
+    func setParameter(key: String, value: String?) -> Self {
         parameters[key] = value
         return self
     }

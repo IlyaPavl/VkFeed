@@ -71,7 +71,7 @@ class NewsFeedTableViewCell: UITableViewCell {
         let padding = textView.textContainer.lineFragmentPadding
         textView.textContainerInset = .zero
         
-        textView.dataDetectorTypes = UIDataDetectorTypes.all
+        textView.dataDetectorTypes = UIDataDetectorTypes.link
         return textView
     }()
     
@@ -131,7 +131,6 @@ class NewsFeedTableViewCell: UITableViewCell {
     private let likesContainer: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-//        view.backgroundColor = .systemGray5
         view.layer.cornerRadius = Constants.bottomViewHeight / 2
         view.clipsToBounds = true
         return view
@@ -140,7 +139,6 @@ class NewsFeedTableViewCell: UITableViewCell {
     private let commentsContainer: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-//        view.backgroundColor = .systemGray5
         view.layer.cornerRadius = Constants.bottomViewHeight / 2
         view.clipsToBounds = true
         return view
@@ -149,7 +147,6 @@ class NewsFeedTableViewCell: UITableViewCell {
     private let sharesContainer: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-//        view.backgroundColor = .systemGray5
         view.layer.cornerRadius = Constants.bottomViewHeight / 2
         view.clipsToBounds = true
         return view
@@ -424,6 +421,7 @@ extension NewsFeedTableViewCell {
     }
 }
 
+// MARK: - UITextViewDelegate
 extension NewsFeedTableViewCell: UITextViewDelegate {
     func textView(_ textView: UITextView, primaryActionFor textItem: UITextItem, defaultAction: UIAction) -> UIAction? {
         if case .link(let url) = textItem.content {

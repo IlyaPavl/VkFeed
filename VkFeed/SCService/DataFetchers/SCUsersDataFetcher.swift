@@ -31,8 +31,6 @@ struct SCUsersDataFetcher: SCUsersDataFetcherProtocol {
             parameters: parameters,
             headers: nil
         )
-        
-        print(result.response.first)
         return result.response.first
     }
 

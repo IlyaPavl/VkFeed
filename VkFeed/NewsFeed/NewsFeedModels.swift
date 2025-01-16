@@ -15,6 +15,7 @@ public enum NewsFeed {
             enum RequestType {
                 case getNewsFeed
                 case getUser
+                case getNextBatch
                 case revealPostId(postId: Int)
             }
         }

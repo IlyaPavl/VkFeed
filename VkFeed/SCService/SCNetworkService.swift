@@ -37,7 +37,6 @@ class SCNetworkService: SCNetworkServiceProtocol {
         guard let url = createURL(path: path, parameters: allParameters) else {
             throw APIError.invalidURL
         }
-        print(url)
         
         var request = URLRequest(url: url)
         request.httpMethod = method.rawValue

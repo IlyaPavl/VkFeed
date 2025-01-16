@@ -21,7 +21,7 @@ class NewsFeedViewController: UIViewController {
     private var feedViewModel = FeedViewModel.init(cells: [])
     private let refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(NewsFeedViewController.self, action: #selector(getNewsFeedData), for: .valueChanged)
+        refreshControl.addTarget(self, action: #selector(getNewsFeedData), for: .valueChanged)
         
         return refreshControl
     }()
@@ -78,7 +78,6 @@ extension NewsFeedViewController: NewsFeedTableViewCellDelegate {
     }
     
     func didTapURL(_ url: URL) {
-        // Открываем URL в SFSafariViewController
         let safariVC = SFSafariViewController(url: url)
         present(safariVC, animated: true)
     }
@@ -103,6 +102,14 @@ extension NewsFeedViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let cellViewModel = feedViewModel.cells[indexPath.row]
         return cellViewModel.sizes.totalHeight
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if scrollView.contentOffset.y > scrollView.contentSize.height / 1.1 {
+            Task {
+                await interactor?.makeRequest(request: .getNextBatch)
+            }
+        }
     }
 }
 
@@ -143,6 +150,5 @@ extension NewsFeedViewController {
     private func setupTopBars() {
         self.navigationController?.navigationBar.shadowImage = UIImage()
         self.navigationItem.titleView = titleView
-
     }
 }
