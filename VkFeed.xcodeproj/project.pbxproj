@@ -48,7 +48,6 @@
 		C7F727E92B28C81B0031E069 /* VkFeedUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F727E82B28C81B0031E069 /* VkFeedUITestsLaunchTests.swift */; };
 		C7F727F82B28CE7A0031E069 /* VKSdkFramework.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7F727F72B28CE7A0031E069 /* VKSdkFramework.xcframework */; };
 		C7F727F92B28CE7A0031E069 /* VKSdkFramework.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C7F727F72B28CE7A0031E069 /* VKSdkFramework.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		C7F727FF2B28D3040031E069 /* AuthViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C7F727FE2B28D3040031E069 /* AuthViewController.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -127,7 +126,6 @@
 		C7F727E62B28C81B0031E069 /* VkFeedUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VkFeedUITests.swift; sourceTree = "<group>"; };
 		C7F727E82B28C81B0031E069 /* VkFeedUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VkFeedUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		C7F727F72B28CE7A0031E069 /* VKSdkFramework.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = VKSdkFramework.xcframework; path = Carthage/Build/VKSdkFramework.xcframework; sourceTree = "<group>"; };
-		C7F727FE2B28D3040031E069 /* AuthViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AuthViewController.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -345,7 +343,6 @@
 			isa = PBXGroup;
 			children = (
 				C7F727C92B28C81A0031E069 /* AuthViewController.swift */,
-				C7F727FE2B28D3040031E069 /* AuthViewController.storyboard */,
 			);
 			path = AuthViewController;
 			sourceTree = "<group>";
@@ -462,7 +459,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C7F727D22B28C81B0031E069 /* LaunchScreen.storyboard in Resources */,
-				C7F727FF2B28D3040031E069 /* AuthViewController.storyboard in Resources */,
 				48F5F3E22D3A6E8C00472506 /* Localizable.xcstrings in Resources */,
 				C7F727CF2B28C81B0031E069 /* Assets.xcassets in Resources */,
 			);

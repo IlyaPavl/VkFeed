@@ -49,8 +49,7 @@ final class FooterView: UIView {
             top: topAnchor,
             leading: leadingAnchor,
             bottom: nil,
-            trailing: trailingAnchor,
-            padding: Constants.footerDescriptionInsets
+            trailing: trailingAnchor
         )
         loader.centerXAnchor
             .constraint(equalTo: centerXAnchor).isActive = true

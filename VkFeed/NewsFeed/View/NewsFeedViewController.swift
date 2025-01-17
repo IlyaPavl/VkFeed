@@ -87,6 +87,19 @@ extension NewsFeedViewController: NewsFeedTableViewCellDelegate {
     }
 }
 
+extension NewsFeedViewController: TitleViewDelegate {
+    func showLogoutAlert(with alert: UIAlertController) {
+        self.present(alert, animated: true)
+    }
+
+    func didTapLogout() {
+        Task {
+            await interactor?.makeRequest(request: .logout)
+        }
+    }
+
+}
+
 // MARK: - UITableViewDelegate, UITableViewDataSource
 extension NewsFeedViewController: UITableViewDelegate, UITableViewDataSource {
     
@@ -155,5 +168,6 @@ extension NewsFeedViewController {
     private func setupTopBars() {
         self.navigationController?.navigationBar.shadowImage = UIImage()
         self.navigationItem.titleView = titleView
+        titleView.delegate = self
     }
 }

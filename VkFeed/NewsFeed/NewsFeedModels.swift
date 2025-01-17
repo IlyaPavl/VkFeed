@@ -17,6 +17,7 @@ public enum NewsFeed {
                 case getUser
                 case getNextBatch
                 case revealPostId(postId: Int)
+                case logout
             }
         }
         struct Response {

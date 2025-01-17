@@ -8,10 +8,11 @@
 import UIKit
 import VKSdkFramework
 
-class SceneDelegate: UIResponder, UIWindowSceneDelegate, AuthServiceDelegate {
+class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
     var authService: AuthService?
+    let authVC = AuthViewController()
     
     static func shared() -> SceneDelegate {
         let scene = UIApplication.shared.connectedScenes.first
@@ -29,7 +30,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, AuthServiceDelegate {
         authService = AuthService()
         authService?.delegate = self
         
-        let authVC = AuthViewController()
         window?.rootViewController = authVC
         window?.makeKeyAndVisible()
     }
@@ -49,8 +49,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, AuthServiceDelegate {
     func sceneWillEnterForeground(_ scene: UIScene) {}
 
     func sceneDidEnterBackground(_ scene: UIScene) {}
-    
-    //MARK: - AuthServiceDelegate
+}
+
+//MARK: - AuthServiceDelegate
+extension SceneDelegate: AuthServiceDelegate {
     func authServiceShouldShow(viewController: UIViewController) {
         window?.rootViewController?.present(viewController, animated: true)
     }
@@ -65,5 +67,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, AuthServiceDelegate {
     func authServiceSignInDidFail() {
         print(#function)
 
+    }
+    
+    func authServiceDidLogout() {
+        window?.rootViewController?.dismiss(animated: true, completion: {
+            self.window?.rootViewController = UINavigationController(rootViewController: self.authVC)
+        })
     }
 }

@@ -35,7 +35,7 @@ class CustomTextField: UITextField {
     private func setupCustomTextFieldView() {
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .systemGray6
-        placeholder = "Search..."
+        placeholder = "Поиск..."
         font = Constants.searchBarFont
         clearButtonMode = .whileEditing
         borderStyle = .none

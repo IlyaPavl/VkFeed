@@ -11,8 +11,14 @@ protocol TitleViewModel {
     var profileImageURL: String? { get }
 }
 
+protocol TitleViewDelegate: AnyObject {
+    func showLogoutAlert(with alert: UIAlertController)
+    func didTapLogout()
+}
+
 final class TitleView: UIView {
-    
+
+    weak var delegate: TitleViewDelegate?
     private var searchTextField = CustomTextField()
     
     private var profileAvatarView: WebImageView = {
@@ -27,6 +33,7 @@ final class TitleView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupTitleView()
+        setupTapGesture()
     }
 
     required init?(coder: NSCoder) {
@@ -45,6 +52,29 @@ final class TitleView: UIView {
     
     func set(userViewModel: TitleViewModel) {
         profileAvatarView.set(imageURL: userViewModel.profileImageURL)
+    }
+    
+    private func setupTapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapOnProfileAvatar))
+        profileAvatarView.addGestureRecognizer(tapGesture)
+        profileAvatarView.isUserInteractionEnabled = true
+    }
+    
+    @objc private func handleTapOnProfileAvatar() {
+        let alertController = UIAlertController(
+            title: "Выход",
+            message: "Вы уверены, что хотите выйти?",
+            preferredStyle: .alert
+        )
+        
+        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        
+        let logoutAction = UIAlertAction(title: "Выйти", style: .destructive) { [weak self] _ in
+            self?.delegate?.didTapLogout()
+        }
+        alertController.addAction(logoutAction)
+        delegate?.showLogoutAlert(with: alertController)
     }
     
     private func setupTitleView() {

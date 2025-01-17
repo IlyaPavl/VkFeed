@@ -60,6 +60,11 @@ class NewsFeedInteractor: NewsFeedBusinessLogic {
         case .revealPostId(postId: let postId):
             revealedPostIds.append(postId)
             await presentFeed()
+        case .logout:
+            DispatchQueue.main.async {
+                let authService = SceneDelegate.shared().authService
+                authService?.logout()
+            }
         }
     }
     

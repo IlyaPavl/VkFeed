@@ -21,7 +21,7 @@ class AuthViewController: UIViewController {
 
 extension AuthViewController {
     func setupAuthVC() {
-        view.backgroundColor = .lightGray
+        view.backgroundColor = .systemGray5
         
         loginButton.backgroundColor = UIColor.systemBlue
         loginButton.setTitle("Авторизация ВКонтакте", for: .normal)
