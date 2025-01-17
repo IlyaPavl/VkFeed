@@ -18,7 +18,7 @@ class NewsFeedViewController: UIViewController {
     var interactor: NewsFeedBusinessLogic?
     var router: (NSObjectProtocol & NewsFeedRoutingLogic)?
     private let tableView = NewsFeedTableView()
-    private var feedViewModel = FeedViewModel.init(cells: [])
+    private var feedViewModel = FeedViewModel.init(cells: [], footerTitle: nil)
     private let refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(getNewsFeedData), for: .valueChanged)
@@ -26,6 +26,7 @@ class NewsFeedViewController: UIViewController {
         return refreshControl
     }()
     private let titleView = TitleView()
+    private lazy var footerView = FooterView()
     
     // MARK: - Setup
     private func setup() {
@@ -59,10 +60,13 @@ extension NewsFeedViewController: NewsFeedDisplayLogic {
         switch viewModel {
         case .dispalyNewsFeed(feedViewModel: let feedViewModel):
             self.feedViewModel = feedViewModel
+            footerView.setDescription(feedViewModel.footerTitle ?? "Загружаем еще...")
             refreshControl.endRefreshing()
             tableView.reloadData()
-            case .displayUserInfo(userViewModel: let userViewModel):
-                titleView.set(userViewModel: userViewModel)
+        case .displayUserInfo(userViewModel: let userViewModel):
+            titleView.set(userViewModel: userViewModel)
+        case .displayFooterLoader:
+            footerView.showLoader()
         }
     }
 }
@@ -121,12 +125,13 @@ extension NewsFeedViewController {
         self.view.backgroundColor = .white
         tableView.keyboardDismissMode = .onDrag
         tableView.refreshControl = refreshControl
+        tableView.tableFooterView = footerView
         
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
     

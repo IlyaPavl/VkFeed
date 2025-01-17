@@ -39,7 +39,7 @@ class CustomTextField: UITextField {
         font = Constants.searchBarFont
         clearButtonMode = .whileEditing
         borderStyle = .none
-        layer.cornerRadius = Constants.imageViewCornerRadius
+        layer.cornerRadius = Constants.commonCornerRadius
         layer.masksToBounds = true
         
         let image = UIImage(systemName: "magnifyingglass")?.withRenderingMode(.alwaysTemplate)

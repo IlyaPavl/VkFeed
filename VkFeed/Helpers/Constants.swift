@@ -34,8 +34,10 @@ struct Constants {
     static let moreTextButtonInsets: UIEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
     static let moreTextButtonSize: CGSize = CGSize(width: 170, height: postLabelFont.lineHeight)
     
-    static let imageViewCornerRadius: CGFloat = 10
+    static let commonCornerRadius: CGFloat = 10
     static let searchBarFont = UIFont.systemFont(ofSize: 14)
     static let profileAvatarInsets: UIEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
 
+    static let footerDescriptionFont: UIFont = .systemFont(ofSize: 13)
+    static let footerDescriptionInsets: UIEdgeInsets = .init(top: 8, left: 20, bottom: 0, right: 20)
 }

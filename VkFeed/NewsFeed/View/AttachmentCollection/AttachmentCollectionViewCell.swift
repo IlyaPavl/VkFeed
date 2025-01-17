@@ -28,7 +28,7 @@ final class AttachmentCollectionViewCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        imageView.layer.cornerRadius = Constants.imageViewCornerRadius
+        imageView.layer.cornerRadius = Constants.commonCornerRadius
         imageView.layer.masksToBounds = true
         imageView.backgroundColor = .systemBackground
     }

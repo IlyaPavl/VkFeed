@@ -47,7 +47,7 @@ class NewsFeedTableViewCell: UITableViewCell {
     // Первый слой
     private let cardView = {
         let view = UIView()
-        view.layer.cornerRadius = 10
+        view.layer.cornerRadius = Constants.commonCornerRadius
         view.clipsToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -88,7 +88,7 @@ class NewsFeedTableViewCell: UITableViewCell {
     private let postImageView: WebImageView = {
         let imageView = WebImageView()
         imageView.contentMode = .scaleAspectFit
-        imageView.layer.cornerRadius = Constants.imageViewCornerRadius
+        imageView.layer.cornerRadius = Constants.commonCornerRadius
         imageView.clipsToBounds = true
         return imageView
     }()

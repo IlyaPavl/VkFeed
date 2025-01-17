@@ -26,22 +26,36 @@ class NewsFeedPresenter: NewsFeedPresentationLogic {
     
     func presentData(response: NewsFeed.Model.Response.ResponseType) async {
         switch response {
-                
-            case .presentNewsFeed(feed: let feed, let revealedPostIds):
-                print(revealedPostIds)
-                let cells = feed.items.map { feedItem in
-                    cellViewModel(from: feedItem, profiles: feed.profiles, groups: feed.groups, revealedPostIds: revealedPostIds)
-                }
-                let feedViewModel = FeedViewModel(cells: cells)
-                
-                viewController?.displayData(viewModel: .dispalyNewsFeed(feedViewModel: feedViewModel))
-            case .presentUserInfo(user: let user):
-                let userViewModel = UserViewModel(profileImageURL: user?.photo100)
-                viewController?.displayData(viewModel: .displayUserInfo(userViewModel: userViewModel))
+            
+        case .presentNewsFeed(feed: let feed, let revealedPostIds):
+            print(revealedPostIds)
+            let cells = feed.items.map { feedItem in
+                cellViewModel(
+                    from: feedItem,
+                    profiles: feed.profiles,
+                    groups: feed.groups,
+                    revealedPostIds: revealedPostIds
+                )
+            }
+            let footerTitle = String.localizedStringWithFormat(
+                NSLocalizedString("%lld posts", comment: ""),
+                cells.count
+            )
+            let feedViewModel = FeedViewModel(cells: cells, footerTitle: footerTitle)
+            
+            viewController?.displayData(viewModel: .dispalyNewsFeed(feedViewModel: feedViewModel))
+        case .presentUserInfo(user: let user):
+            let userViewModel = UserViewModel(profileImageURL: user?.photo100)
+            viewController?.displayData(viewModel: .displayUserInfo(userViewModel: userViewModel))
+        case .presentFooterLoader:
+            viewController?.displayData(viewModel: .displayFooterLoader)
         }
     }
     
-    private func cellViewModel(from feedItem: FeedItem, profiles: [Profile], groups: [Group], revealedPostIds: [Int]) -> FeedViewModel.Cell {
+    private func cellViewModel(from feedItem: FeedItem,
+                               profiles: [Profile],
+                               groups: [Group],
+                               revealedPostIds: [Int]) -> FeedViewModel.Cell {
         
         let profile = profile(for: feedItem.sourceId, profiles: profiles, groups: groups)
         let date = Date(timeIntervalSince1970: feedItem.date)
@@ -54,7 +68,6 @@ class NewsFeedPresenter: NewsFeedPresentationLogic {
             isFullSizedPost: isFullSized
         )
         
-         
         return FeedViewModel.Cell.init(postId: feedItem.postId,
                                        iconUrlString: profile.photo,
                                        name: profile.name,

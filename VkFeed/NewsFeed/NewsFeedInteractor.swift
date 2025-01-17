@@ -47,6 +47,7 @@ class NewsFeedInteractor: NewsFeedBusinessLogic {
         
         case .getNextBatch:
             nextFromInProccess = feedResponse?.nextFrom
+            await presenter?.presentData(response: .presentFooterLoader)
             do {
                 let feed = try await feedFetcher.getFeed(nextBatchFrom: nextFromInProccess)
                 guard let feed, self.feedResponse?.nextFrom != feed.nextFrom else { return }
