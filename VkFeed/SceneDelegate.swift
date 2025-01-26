@@ -62,6 +62,7 @@ extension SceneDelegate: AuthServiceDelegate {
         let newsFeedVC = NewsFeedViewController()
         let navVC = UINavigationController(rootViewController: newsFeedVC)
         window?.rootViewController = navVC
+        window?.makeKeyAndVisible()
     }
     
     func authServiceSignInDidFail() {
